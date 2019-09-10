@@ -1,0 +1,20 @@
+form div.col-sm-10 input {
+    width: 80%;
+}
+
+form div.col-sm-10 input.small {
+    width: 40%;
+}
+
+form div.col-sm-10 input {
+    width: 80%;
+}
+
+input.cta {
+    margin: 10px 10px;
+    width: 20%;
+}
+
+div.cta-group {
+    width: 100%;
+}

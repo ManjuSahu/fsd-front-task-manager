@@ -9,7 +9,7 @@ import { UserService } from '../user.service';
 })
 export class UserComponent implements OnInit {
 
-  users: Object;
+  users: Object = [];
   
   userAddForm: FormGroup;
 
@@ -33,13 +33,18 @@ export class UserComponent implements OnInit {
     const user = Object.assign({}, this.userAddForm.value);
     console.log(user);
     this.userService.addUser(user).subscribe(data => {
-      console.log('response'+data);      
+      this.userService.getUsers().subscribe(data => {
+        this.users = data;
+      })      
     })
     this.success = true;
   }
 
 
   ngOnInit() {
+    this.userService.getUsers().subscribe(data => {
+      this.users = data;
+    })
   }
 
 }

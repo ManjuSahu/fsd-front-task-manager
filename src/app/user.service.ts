@@ -11,4 +11,8 @@ export class UserService {
   addUser(user: Object) {
     return this.http.post("http://localhost:8080/users", user);
   }
+
+  getUsers() {
+    return this.http.get("http://localhost:8080/users");
+  }
 }
