@@ -1,0 +1,45 @@
+<h1>Contact Us!</h1>
+<form [formGroup]="userAddForm" (ngSubmit)="onSubmit()">
+  <h5 *ngIf="success">Your form is valid!</h5> 
+
+  <div>
+    <label>
+        First Name: 
+        <input type="text" formControlName="firstName">
+        <!-- <div *ngIf="submitted && messageForm.controls.name.errors" class="error">
+          <div *ngIf="messageForm.controls.name.errors.required">Your name is required!!</div>
+        </div> -->
+      </label>
+  </div>
+  <div>
+    <label>
+        Last Name: 
+        <input type="text" formControlName="lastName">
+            <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
+                <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
+            </div> -->
+    </label>
+  </div>
+  
+  <div>  
+    <label>
+        Employee ID: 
+        <input type="text" formControlName="employeeId">
+            <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
+                <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
+            </div> -->
+    </label>
+  </div>
+  
+      <input type="submit" value="Add" clas="cta">
+      <input type="reset" value="Reset" clas="cta">
+</form>
+
+<!-- <div *ngIf="submitted" class="results">
+  <strong>Name: </strong>
+  <span>{{ messageForm.controls.name.value }}</span>
+
+  
+  <strong>Message: </strong>
+  <span>{{ messageForm.controls.message.value }}</span>
+</div> -->
