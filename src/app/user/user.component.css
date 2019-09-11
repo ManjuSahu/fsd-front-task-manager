@@ -1,3 +1,7 @@
+form input {
+    margin: 0 2px 0 2px;
+}
+
 form div.col-sm-10 input {
     width: 80%;
 }
@@ -10,7 +14,7 @@ form div.col-sm-10 input {
     width: 80%;
 }
 
-input.cta {
+form input.cta {
     margin: 10px 10px;
     width: 20%;
 }
