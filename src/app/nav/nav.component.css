@@ -1,27 +1,9 @@
-/* header {
-    background: blue;
-} */
-
-nav {
-    display: flex;
-    /* justify-content: space-between; */
-    padding: 0 10% 0 5%;
+header {
+    font-size: 24px;
+    color: #337ab7;
 }
 
-nav > a {
-    margin: 16px;
+h2 {
+    margin-left: 15px;
 }
 
-ul {
-    list-style: none;
-}
-
-li {
-    display: inline-block;
-    margin: 0 10px;
-}
-
-a {
-    color: black;
-    text-decoration: none;
-}

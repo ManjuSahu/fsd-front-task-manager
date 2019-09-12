@@ -1,24 +1,21 @@
-form input {
-    margin: 0 2px 0 2px;
+section {
+    max-width: 800px;
 }
 
-form div.col-sm-10 input {
-    width: 80%;
+input.cta {
+    width: 100px;
+    margin: 2px;
+    vertical-align: center;
+}
+div.font-bold {
+    font-weight: bold;
 }
 
-form div.col-sm-10 input.small {
-    width: 40%;
+.list-item {
+    display: flex;
+    justify-content: space-between;
 }
 
-form div.col-sm-10 input {
-    width: 80%;
-}
-
-form input.cta {
-    margin: 10px 10px;
-    width: 20%;
-}
-
-div.cta-group {
-    width: 100%;
+form {
+    margin-left: 40px;
 }
