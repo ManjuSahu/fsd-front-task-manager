@@ -1,8 +1,19 @@
 section {
     max-width: 800px;
+    margin-top: 40px;
+}
+.user-form input {
+    width: 100%;
+}
+.user-form label {
+    text-align: left;
 }
 
-input.cta {
+.cta-group {
+    text-align: right;
+}
+input.cta,
+button.cta {
     width: 100px;
     margin: 2px;
     vertical-align: center;
@@ -14,8 +25,23 @@ div.font-bold {
 .list-item {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 form {
     margin-left: 40px;
+}
+
+div.search-bar {
+    margin: 20px 0;
+    margin-left: 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+span.italic {
+    font-style: italic;
+    font-weight: bold;
+    padding-top: 5px;
 }

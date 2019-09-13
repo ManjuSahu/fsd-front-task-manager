@@ -1,9 +1,3 @@
-header {
-    font-size: 24px;
-    color: #337ab7;
+.nav-item {
+    margin: 0 10px;
 }
-
-h2 {
-    margin-left: 15px;
-}
-
