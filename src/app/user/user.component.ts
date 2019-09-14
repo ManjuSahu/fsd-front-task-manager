@@ -45,7 +45,7 @@ export class UserComponent implements OnInit {
     if(userFromList > 0) {
       this.userService.updateUser(user).subscribe(data => {
         this.userService.getUsers().subscribe(data => {
-          this.users = data;
+          this.users = this.searchedUsers = data;
           this._resetForm();
         });
       });
@@ -53,8 +53,7 @@ export class UserComponent implements OnInit {
     else {
       this.userService.addUser(user).subscribe(data => {
         this.userService.getUsers().subscribe(data => {
-          
-          this.users = data;
+        this.users = this.searchedUsers = data;
           this._resetForm();
         });
       });
@@ -87,7 +86,7 @@ export class UserComponent implements OnInit {
   delete(user) {
     this.userService.deleteUser(user).subscribe(data => {
       this.userService.getUsers().subscribe(data => {
-        this.users = data;
+        this.users = this.searchedUsers = data;
       });
     });
   }
