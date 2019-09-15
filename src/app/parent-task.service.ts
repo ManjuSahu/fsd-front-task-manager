@@ -13,7 +13,7 @@ export class ParentTaskService {
     return this.http.put("http://localhost:8080/parentTasks", parentTask);
   }
 
-  addParentTask(parentTask: ParentTask) {
+  addParentTask(parentTask: any) {
     return this.http.post("http://localhost:8080/parentTasks", parentTask);
   }
 

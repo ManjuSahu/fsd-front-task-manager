@@ -1,0 +1,94 @@
+section {
+    max-width: 1000px;
+    margin-top: 40px;
+    margin-right: 10px;
+}
+
+div.search-sort-bar {
+    margin-left: 25px;
+    margin-bottom: 40px;
+}
+
+div.search-sort-bar input {
+    width: 100%;
+}
+
+button.search-button {
+    width: 100%;
+}
+
+div.sort-bar {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.search-sort-bar > div {
+    display: flex;
+    margin-left: 0;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2px;
+}
+
+div.sort-bar * {
+    margin: 2px 2px 0 2px;
+    padding-left: 0;
+    width: 100px;
+}
+
+div.search-sort-bar > div.sort-icon-holder {
+    text-align: right;
+    padding-right: 0;
+    padding-left: 0;
+    vertical-align: middle;
+}
+
+span.italic {
+    font-style: italic;
+    font-size: small;
+}
+
+.project-list-item-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-list {
+    padding-right: 0;
+}
+
+.cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.cta-group button {
+    width: 100px;
+    margin: 2px 2px;
+}
+
+div.project-search-bar {
+    margin-left: 40px;
+    margin-bottom: 20px;
+}
+
+div.project-search-bar input {
+    width: 100%;
+}
+
+.project-list-item {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+} 
+
+.font-bold {
+    font-weight: bold;
+}
+
+form {
+    margin-left: 40px;
+}
+
+

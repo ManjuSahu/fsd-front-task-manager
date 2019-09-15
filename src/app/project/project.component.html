@@ -39,7 +39,7 @@
               Priority: 
         </label>
         <div class="col-sm-10"> 
-          <input type="range" class="custom-range" formControlName="priority" id="ageInputId" value="0" min="0" max="30" oninput="ageOutputId.value = ageInputId.value">
+          <input type="range" class="custom-range" formControlName="priority" value="0" min="0" max="30">
           <label>{{ projectAddForm.get('priority').value  }}</label>
         <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
             <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>

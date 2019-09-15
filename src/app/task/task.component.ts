@@ -7,6 +7,9 @@ import { Project } from '../project';
 import { Task } from '../task';
 import { ParentTaskService } from '../parent-task.service';
 import { ParentTask } from '../parent-task';
+import { User } from '../user';
+import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task',
@@ -18,6 +21,10 @@ export class TaskComponent implements OnInit {
   projects: Project[];
 
   searchedProjects: Project[];
+
+  parentTasks: ParentTask[];
+
+  searchedParentTasks: ParentTask[];
   
   taskAddForm: FormGroup;
 
@@ -25,32 +32,70 @@ export class TaskComponent implements OnInit {
 
   success: Boolean = false;
 
-  // sortColumn: String = '';
-
   dateInputEnabled: Boolean = true;
 
-  // users: User[];
+  users: User[];
 
-  // searchedUsers: User[];
+  searchedUsers: User[];
 
+  selectedTask: Task
+  
   @ViewChild('closeSelectProjectModal') closeSelectProjectModal: ElementRef;
 
   @ViewChild("formSubmit") formSubmit: ElementRef;
+
+  @ViewChild("searchParentTaskButton") searchParentTaskButton: ElementRef;
+  
+  @ViewChild("searchTaskOwnerButton") searchTaskOwnerButton: ElementRef;
+
+  @ViewChild("searchProjectButton") searchProjectButton: ElementRef;
+
   @Injectable()
   constructor(@Inject(DOCUMENT) private document: Document,
               private formBuilder: FormBuilder, 
               private taskService: TaskService,
               private projectService: ProjectService,
-              private parentTaskService: ParentTaskService) { 
-    this.taskAddForm = this.formBuilder.group({
-      projectName: [{value: '', disabled: true}, Validators.required],
-      task: ['', Validators.required],
-      isParentTask: [false],
-      priority: [0, Validators.required],
-      startDate: [{value: ''}],
-      endDate: [{value: ''}],
-      projectId: '',
-    });
+              private parentTaskService: ParentTaskService,
+              private userService: UserService,
+              private router: Router) { 
+
+      if(this.router.getCurrentNavigation().extras.state) {
+        this.selectedTask = this.router.getCurrentNavigation().extras.state.selectedTask;
+      }
+      console.log(this.selectedTask);
+      this.initializeForm();
+  }
+
+  initializeForm() {
+    this.taskAddForm = this.formBuilder.group(this.getFormModel());
+    this.setRangeInputValueAgain();
+    this.disbleParentTaskFields();
+  }
+
+  setRangeInputValueAgain() {
+    setTimeout(() => {
+      if(this.selectedTask) {
+        this.taskAddForm.get('priority').setValue(this.selectedTask.priority);
+        this.searchProjectButton.nativeElement.disabled = true;
+      }
+    }, 0);
+  }
+
+  getFormModel() {
+    return {
+      projectId: this.selectedTask ? this.selectedTask.project.projectId : '',
+      projectName: [{value: this.selectedTask ? this.selectedTask.project.project : '', disabled: true}, Validators.required],
+      task: [this.selectedTask ? this.selectedTask.task : '', Validators.required],
+      isParentTask: [{value: this.selectedTask ? this.selectedTask.isParentTask : false, disabled: this.selectedTask}],
+      priority: [this.selectedTask ? this.selectedTask.priority : 0, Validators.required],
+      startDate: this.selectedTask ? this.selectedTask.startDate: this.today(),
+      endDate: this.selectedTask ? this.selectedTask.endDate : this.tomorrow(),
+      parentTaskId: this.selectedTask && this.selectedTask.parentTask ? this.selectedTask.parentTask.parentId : '',
+      parentTaskName: [{value: this.selectedTask && this.selectedTask.parentTask ? this.selectedTask.parentTask.parentTask : '', disabled: true}],
+      taskOwnerId: this.selectedTask && this.selectedTask.taskOwner ? this.selectedTask.taskOwner.userId : '',
+      taskOwnerName: [{value: this.selectedTask && this.selectedTask.taskOwner ? this.selectedTask.taskOwner.firstName + ' ' + this.selectedTask.taskOwner.lastName: '', 
+        disabled: true}],
+    }
   }
 
   disbleParentTaskFields() {
@@ -59,6 +104,12 @@ export class TaskComponent implements OnInit {
         this.taskAddForm.get('priority').disable();
         this.taskAddForm.get('startDate').disable();
         this.taskAddForm.get('endDate').disable();
+        this.searchParentTaskButton.nativeElement.disabled = true;
+        this.searchTaskOwnerButton.nativeElement.disabled = true;
+        this.taskAddForm.get('parentTaskName').setValue('');
+        this.taskAddForm.get('taskOwnerName').setValue('');
+        this.taskAddForm.get('startDate').setValue('');
+        this.taskAddForm.get('endDate').setValue('');
       }
       else {
         this._initializeParentTaskFields();
@@ -66,16 +117,28 @@ export class TaskComponent implements OnInit {
     }, 0);
   }
 
-  _initializeParentTaskFields() {
+  today() {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  tomorrow() {
     const today = new Date();
     const tomorrow = new Date();
-    tomorrow.setDate(today.getDate() + 1);
+    tomorrow.setDate(today.getDate() + 1)
+    return tomorrow.toISOString().split('T')[0];
+  }
+
+  _initializeParentTaskFields() {
     this.taskAddForm.get('priority').enable();
-    this.taskAddForm.get('priority').setValue(0);
     this.taskAddForm.get('startDate').enable();
-    this.taskAddForm.get('startDate').setValue(today.toISOString().split('T')[0]);
     this.taskAddForm.get('endDate').enable();
-    this.taskAddForm.get('endDate').setValue(tomorrow.toISOString().split('T')[0]);
+    this.searchParentTaskButton.nativeElement.disabled = false;
+    this.searchTaskOwnerButton.nativeElement.disabled = false;
+    if(!this.selectedTask) {
+      this.taskAddForm.get('priority').setValue(0);
+      this.taskAddForm.get('startDate').setValue(this.today());
+      this.taskAddForm.get('endDate').setValue(this.tomorrow());
+    }
   }
 
   selectProject(project: Project) {
@@ -84,25 +147,35 @@ export class TaskComponent implements OnInit {
     this.document.getElementById('closeSelectProjectModal').click();
   }
 
+  selectParentTask(parentTask: ParentTask) {
+    this.taskAddForm.get('parentTaskId').setValue(parentTask.parentId);
+    this.taskAddForm.get('parentTaskName').setValue(parentTask.parentTask);
+    this.document.getElementById('closeSelectParentTaskModal').click();
+  }
+
+  selectTaskOwner(user: User) {
+    this.taskAddForm.get('taskOwnerId').setValue(user.userId);
+    this.taskAddForm.get('taskOwnerName').setValue(user.firstName + ' ' + user.lastName);
+    this.document.getElementById('closeSelectTaskOwnerModal').click();
+  }
+
   onSubmit() {
-    debugger;
     this.submitted = true;
     if(this.taskAddForm.invalid) {
       return;
     }
-    if(this.taskAddForm.get('isParentTask')) {
-      const task: ParentTask = {
-        parentId: null,
+    if(this.taskAddForm.get('isParentTask').value) {
+      const task = Object.assign({}, {
+        parentId: this.selectedTask ? this.selectedTask.taskId : '',
         parentTask: this.taskAddForm.get('task').value,
-      }
+        projectId: this.taskAddForm.get('projectId').value,
+      });
       this.parentTaskService.addParentTask(task).subscribe(data => {
-          console.log(data);
           this._resetForm();
       });
     } else {
-      const task: Task = Object.assign({}, this.taskAddForm.value);
+      const task: Task = Object.assign({taskId: this.selectedTask ? this.selectedTask.taskId: ''}, this.taskAddForm.value);
       this.taskService.addTask(task).subscribe(data => {
-          console.log(data);
           this._resetForm();
       });
     }
@@ -119,32 +192,13 @@ export class TaskComponent implements OnInit {
     this.projectService.getProjects().subscribe(data => {
       this.projects = this.searchedProjects = data;
     })
+    this.parentTaskService.getParentTasks().subscribe(data => {
+      this.parentTasks = this.searchedParentTasks = data;
+    })
+    this.userService.getUsers().subscribe(data => {
+      this.users = this.searchedUsers = data;
+    })
   }
-
-  // update(project) {
-  //   console.log('update'+project);
-  //   this.taskAddForm.setValue({
-  //     project : project.project,
-  //     priority : project.priority,
-  //     startDate : project.startDate,
-  //     endDate: project.endDate,
-  //     managerId: project.manager.userId,
-  //     dateInputEnabled: false,
-  //     managerName: project.manager.firstName+ ' '+project.manager.lastName,
-  //     projectId: project.projectId
-  //   });
-  //   console.log(this.formSubmit.nativeElement.value);
-  //   this.formSubmit.nativeElement.value = 'Update';
-  //   console.log(this.formSubmit.nativeElement.value);
-  // }
-
-  // delete(project) {
-  //   this.projectservice.deleteProject(project).subscribe(data => {
-  //     this.projectservice.getProjects().subscribe(data => {
-  //       this.projects = this.searchedProjects = data;
-  //     });
-  //   });
-  // }
 
   searchProjects(event: any) {
     this.searchedProjects = this.projects;
@@ -158,25 +212,28 @@ export class TaskComponent implements OnInit {
     console.log(this.searchedProjects);
   }
 
-  // searchUsers(event: any) {
-  //   this.searchedUsers = this.users;
-  //   let keyword = event.target.value.replace(/ /g, '').toLowerCase();
-  //   if(keyword) {
-  //     console.log('searchUsers'+keyword);
-  //     this.searchedUsers = this.users.filter(
-  //       user => (user.firstName.toLowerCase()+user.lastName.toLowerCase()+ user.employeeId.toString()).includes(keyword)
-  //     );
-  //   } 
-  //   console.log(this.searchedUsers);
-  // }
+  searchParentTasks(event: any) {
+    this.searchedParentTasks = this.parentTasks;
+    let keyword = event.target.value.toLowerCase();
+    if(keyword) {
+      console.log('searchedParentTasks'+keyword);
+      this.searchedParentTasks = this.parentTasks.filter(
+        parentTask => (parentTask.parentTask.toLowerCase().includes(keyword))
+      );
+    } 
+    console.log(this.searchedParentTasks);
+  }
 
-  // sort(sortColumn) {
-  //     console.log(sortColumn);
-  //     this.searchedProjects = this.searchedProjects.sort(function(a,b) {
-  //       var x = a[sortColumn];
-  //       var y = b[sortColumn];
-  //       return x < y ? -1 : x > y ? 1 : 0;
-  //   });
-  // }
+  searchUsers(event: any) {
+    this.searchedUsers = this.users;
+    let keyword = event.target.value.replace(/ /g, '').toLowerCase();
+    if(keyword) {
+      console.log('searchUsers'+keyword);
+      this.searchedUsers = this.users.filter(
+        user => (user.firstName.toLowerCase()+user.lastName.toLowerCase()+ user.employeeId.toString()).includes(keyword)
+      );
+    } 
+    console.log(this.searchedUsers);
+  }
 
 }
