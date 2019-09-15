@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { UserComponent } from './user/user.component';
 import { ProjectComponent } from './project/project.component';
+import { TaskComponent } from './task/task.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
     UserComponent,
-    ProjectComponent
+    ProjectComponent,
+    TaskComponent,
   ],
   imports: [
     BrowserModule,

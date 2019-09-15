@@ -1,0 +1,68 @@
+section {
+    max-width: 800px;
+    margin-top: 40px;
+    margin-right: 10px;
+}
+.task-form input[type="text"],
+.task-form input[type="date"] {
+    width: 100%;
+}
+.task-form label {
+    text-align: left;
+}
+
+button.search-button {
+    width: 100%;
+}
+
+.cta-group {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.cta-group * {
+    width: 150px;
+    vertical-align: center;
+    margin-left: 15px;
+}
+
+input.cta,
+button.cta {
+    width: 100px;
+    margin: 2px;
+    vertical-align: center;
+}
+.font-bold {
+    font-weight: bold;
+}
+
+form {
+    margin-left: 40px;
+}
+
+input[type="date"]:before {
+    content: attr(placeholder);
+}
+input[type="date"]:focus:before,
+input[type="date"]:valid:before {
+    content: "";
+}
+
+.project-list-item {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+div.search-sort-bar {
+    margin: 20px 0;
+    margin-left: 40px;
+}
+
+div.search-sort-bar input {
+    width: 100%;
+}
+
+
+
+
