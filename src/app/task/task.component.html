@@ -6,10 +6,10 @@
           <label class="control-label col-sm-2">
               Project: 
         </label>
-        <div class="col-sm-7"> 
+        <div class="col-sm-6"> 
             <input type="text" formControlName="projectName">
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-4">
             <button type="button" #searchProjectButton class="search-button" data-toggle="modal" data-target="#projectModal">Search</button>
         <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
             <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
@@ -57,10 +57,11 @@
           <label class="control-label col-sm-2">
               Parent Task: 
         </label>
-        <div class="col-sm-7"> 
+        <div class="col-sm-6"> 
             <input type="text" formControlName="parentTaskName">
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-4 button-group">
+            <button type="button" #clearParentTaskButton (click)="clearParentTask()" class="search-button" data-toggle="modal">Clear</button>
             <button type="button" #searchParentTaskButton class="search-button" data-toggle="modal" data-target="#parentTaskModal">Search</button>
         <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
             <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
@@ -87,10 +88,10 @@
           <label class="control-label col-sm-2">
               User: 
         </label>
-        <div class="col-sm-7"> 
+        <div class="col-sm-6"> 
             <input type="text" formControlName="taskOwnerName">
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-4">
             <button type="button" #searchTaskOwnerButton class="search-button" data-toggle="modal" data-target="#taskOwnerModal">Search</button>
         <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
             <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
@@ -114,10 +115,10 @@
           </div>
       </div> -->
   
-      <div class="cta-group"> 
+      <div class="offset-sm-6 col-sm-6 button-group cta-group"> 
             <input id="formSubmit" #formSubmit type="submit" value="{{ selectedTask ? 'Update': 'Add'}}" class="cta">
             <input type="reset" value="Reset" class="cta">
-      </div>
+          </div>
     </form>
   
     <!-- Modal -->

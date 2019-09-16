@@ -136,39 +136,45 @@
           <button class="cta" (click)="sort('startDate')">Start Date</button>
           <button class="cta" (click)="sort('endDate')">End Date</button>
           <button class="cta" (click)="sort('priority')">Priority</button>
-          <button class="cta" (click)="sort('completed')">Completed</button>
+          <button class="cta" (click)="sort('status')">Completed</button>
         </div>
     </div>
     <div class="list-group">
       <ul *ngIf="searchedProjects">
         <li class="list-group-item" *ngFor="let project of searchedProjects">
             <div class="row project-list-item-group">
-              <div class="col-sm-8 project-list-item">
+              <div class="col-sm-10 project-list-item">
+
                   <div class="row">
                     <div class="col-sm-6"><label class="font-bold">Project: </label></div>
                     <div class="col-sm-6"><label>{{project.project}}</label></div>
                   </div>
+
                   <div class="row">
-                    <div class="col-sm-3"><label class="font-bold">No of tasks: </label></div>
-                    <div class="col-sm-3"><div>1</div></div>
-                    <div class="col-sm-3"><label class="font-bold">Completed: </label></div>
-                    <div class="col-sm-3"><div>1</div></div>
+                    <div class="col-sm-2"><label class="font-bold">No of tasks: </label></div>
+                    <div class="col-sm-2"><div>{{ getNoOfTasks(project) }}</div></div>
+                    <div class="col-sm-2"><label class="font-bold">Completed: </label></div>
+                    <div class="col-sm-2"><div>{{ getNoOfCompletedTasks(project) }}</div></div>
+                    <div class="col-sm-2"><label class="font-bold">Priority: </label></div>
+                    <div class="col-sm-2"><div>{{project.priority}}</div></div>
                   </div>
+
                   <div class="row">
-                    <div class="col-sm-3"><label class="font-bold">Start Date: </label></div>
-                    <div class="col-sm-3"><div>{{project.startDate}}</div></div>
-                    <div class="col-sm-3"><label class="font-bold">End Date: </label></div>
-                    <div class="col-sm-3"><div>{{project.endDate}}</div></div>
+                    <div class="col-sm-2"><label class="font-bold">Start Date: </label></div>
+                    <div class="col-sm-2"><div>{{project.startDate}}</div></div>
+                    <div class="col-sm-2"><label class="font-bold">End Date: </label></div>
+                    <div class="col-sm-2"><div>{{project.endDate}}</div></div>
+                    <div class="col-sm-2"><label class="font-bold">Status: </label></div>
+                    <div class="col-sm-2"><div>{{project.status}}</div></div>
                   </div>
+                
               </div>
-              <div class="col-sm-2 project-list-item">
-                <label class="font-bold">Priority: </label>
-                <div>{{project.priority}}</div>
-              </div>
+
               <div class="col-sm-2 project-list-item">
                 <div class="cta-group>"><button class="cta" (click)="update(project)">Update</button></div>
-                <div class="cta-group>"><button class="cta" (click)="delete(project)">Suspend</button></div>
+                <div class="cta-group>"><button class="cta" (click)="suspend(project)">Suspend</button></div>
               </div>
+
           </div>
         </li>
       </ul>

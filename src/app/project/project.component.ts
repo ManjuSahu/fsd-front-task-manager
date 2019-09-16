@@ -122,24 +122,30 @@ export class ProjectComponent implements OnInit {
   }
 
   update(project) {
-    console.log('update'+project);
     this.projectAddForm.setValue({
       project : project.project,
       priority : project.priority,
       startDate : project.startDate,
       endDate: project.endDate,
       managerId: project.manager.userId,
-      dateInputEnabled: false,
+      dateInputEnabled: !!project.startDate || !!project.endDate,
       managerName: project.manager.firstName+ ' '+project.manager.lastName,
       projectId: project.projectId
     });
-    console.log(this.formSubmit.nativeElement.value);
+    console.log(this.projectAddForm.get('dateInputEnabled').value);
+    if(this.projectAddForm.get('dateInputEnabled').value) {
+      this.projectAddForm.get('startDate').enable();
+      this.projectAddForm.get('endDate').enable();
+    } else {
+      this.projectAddForm.get('startDate').disable();
+      this.projectAddForm.get('endDate').disable();
+    }
     this.formSubmit.nativeElement.value = 'Update';
-    console.log(this.formSubmit.nativeElement.value);
   }
 
-  delete(project) {
-    this.projectservice.deleteProject(project).subscribe(data => {
+  suspend(project: Project) {
+    project.status = 'Suspended';
+    this.projectservice.updateProject(project).subscribe(data => {
       this.projectservice.getProjects().subscribe(data => {
         this.projects = this.searchedProjects = data;
       });
@@ -177,6 +183,15 @@ export class ProjectComponent implements OnInit {
         var y = b[sortColumn];
         return x < y ? -1 : x > y ? 1 : 0;
     });
+  }
+
+  getNoOfTasks(project) {
+    return project.tasks.length + project.parentTasks.length;
+  }
+  
+  getNoOfCompletedTasks(project) {
+    return project.tasks.filter(task => task.status === 'Completed').length +
+           project.parentTasks.filter(task => task.status === 'Completed').length;
   }
 
 }

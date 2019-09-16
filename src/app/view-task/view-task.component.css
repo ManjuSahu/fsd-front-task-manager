@@ -1,5 +1,5 @@
 section {
-    max-width: 1000px;
+    /* max-width: 1000px; */
     margin-top: 40px;
     margin-right: 10px;
 }
@@ -14,7 +14,7 @@ div.search-sort-bar input {
 }
 
 button.search-button {
-    width: 100%;
+    width: 100px;
 }
 
 div.sort-bar {
@@ -22,12 +22,13 @@ div.sort-bar {
     flex-wrap: wrap;
 }
 
-div.search-sort-bar > div {
+div.sort-bar > div {
     display: flex;
     margin-left: 0;
     justify-content: space-between;
     align-items: center;
     margin-top: 2px;
+    justify-content: flex-end;
 }
 
 div.sort-bar * {
@@ -60,7 +61,7 @@ span.italic {
 .cta-group {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .cta-group button {
@@ -74,6 +75,10 @@ div.project-search-bar {
 }
 
 div.project-search-bar input {
+    width: 100%;
+}
+
+div.row {
     width: 100%;
 }
 

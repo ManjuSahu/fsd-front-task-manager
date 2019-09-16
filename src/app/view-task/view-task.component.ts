@@ -97,4 +97,33 @@ export class ViewTaskComponent implements OnInit {
       .catch(console.error); 
   }
 
+  end(task) {
+    task.status =  'Completed';
+    if(task.isParentTask) {
+      const parentTask: ParentTask = {
+        parentId: task.taskId,
+        parentTask: task.task,
+        projectId: task.project.projectId,
+        project: task.project,
+        status: task.status
+      }
+      this.parentTaskService.updateParentTask(parentTask).subscribe((data) =>
+        console.log("Task ended!")
+      );
+    }
+    else 
+      this.taskService.updateTask(task).subscribe((data) =>
+        console.log("Task ended!")
+    );
+  }
+
+  sort(sortColumn) {
+    console.log(sortColumn);
+    this.allTasks = this.allTasks.sort(function(a,b) {
+      var x = a[sortColumn];
+      var y = b[sortColumn];
+      return x < y ? -1 : x > y ? 1 : 0;
+  });
+}
+
 }

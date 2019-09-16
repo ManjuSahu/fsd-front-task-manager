@@ -11,27 +11,33 @@ section {
     text-align: left;
 }
 
-button.search-button {
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    vertical-align: middle;
+}
+
+.button-group button:first-of-type{
+  margin-left: 0;
+}
+
+.button-group button:last-of-type{
+  margin-right: 0;
+}
+
+
+
+button.search-button,
+input.cta {
     width: 100%;
+    margin: 2px 2px;
 }
 
 .cta-group {
-    text-align: right;
-    margin-top: 20px;
+    padding-left: 0;
+    padding-right: 0;
 }
 
-.cta-group * {
-    width: 150px;
-    vertical-align: center;
-    margin-left: 15px;
-}
-
-input.cta,
-button.cta {
-    width: 100px;
-    margin: 2px;
-    vertical-align: center;
-}
 .font-bold {
     font-weight: bold;
 }

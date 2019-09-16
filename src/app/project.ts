@@ -9,5 +9,6 @@ export class Project {
     endDate: Date;
     managerId: Number;
     managerName: String;
-    manager: User
+    manager: User;
+    status: String;
 }

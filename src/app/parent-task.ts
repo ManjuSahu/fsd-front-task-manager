@@ -5,4 +5,5 @@ export class ParentTask {
     parentTask: String;
     projectId: Number;
     project: Project;
+    status: String;
 }

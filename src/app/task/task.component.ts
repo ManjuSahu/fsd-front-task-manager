@@ -45,6 +45,8 @@ export class TaskComponent implements OnInit {
   @ViewChild("formSubmit") formSubmit: ElementRef;
 
   @ViewChild("searchParentTaskButton") searchParentTaskButton: ElementRef;
+
+  @ViewChild("clearParentTaskButton") clearParentTaskButton: ElementRef;
   
   @ViewChild("searchTaskOwnerButton") searchTaskOwnerButton: ElementRef;
 
@@ -105,6 +107,7 @@ export class TaskComponent implements OnInit {
         this.taskAddForm.get('startDate').disable();
         this.taskAddForm.get('endDate').disable();
         this.searchParentTaskButton.nativeElement.disabled = true;
+        this.clearParentTaskButton.nativeElement.disabled = true;
         this.searchTaskOwnerButton.nativeElement.disabled = true;
         this.taskAddForm.get('parentTaskName').setValue('');
         this.taskAddForm.get('taskOwnerName').setValue('');
@@ -133,6 +136,7 @@ export class TaskComponent implements OnInit {
     this.taskAddForm.get('startDate').enable();
     this.taskAddForm.get('endDate').enable();
     this.searchParentTaskButton.nativeElement.disabled = false;
+    this.clearParentTaskButton.nativeElement.disabled = false;
     this.searchTaskOwnerButton.nativeElement.disabled = false;
     if(!this.selectedTask) {
       this.taskAddForm.get('priority').setValue(0);
@@ -234,6 +238,11 @@ export class TaskComponent implements OnInit {
       );
     } 
     console.log(this.searchedUsers);
+  }
+
+  clearParentTask() {
+    this.taskAddForm.get('parentTaskId').setValue('');
+    this.taskAddForm.get('parentTaskName').setValue('');
   }
 
 }

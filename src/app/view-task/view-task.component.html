@@ -14,28 +14,23 @@
               Project: 
           </label>
         </div>
-        <div class="col-sm-2"> 
+        <div class="col-sm-3"> 
           <input type="text" disabled value="{{ selectedProject.project }}">
         </div>
         <div class="col-sm-2">
           <button type="button" #searchProjectButton class="search-button" data-toggle="modal" data-target="#projectModal">Search</button>
         </div>
 
-        <!-- <div class="col-sm-1 sort-icon-holder"> 
-          <span class="italic">
-            Sort Task By:
-          </span>
-        </div> -->
-        <div class="col-sm-1 sort-icon-holder">
-            <span class="italic">
+        <div class="col-sm-6 sort-bar">
+          <div class="sort-icon-holder"> 
+              <span class="italic">
                 Sort Task By:
               </span>
-        </div>
-        <div class="col-sm-6 sort-bar">
+          </div>
           <button class="cta" (click)="sort('startDate')">Start Date</button>
           <button class="cta" (click)="sort('endDate')">End Date</button>
           <button class="cta" (click)="sort('priority')">Priority</button>
-          <button class="cta" (click)="sort('completed')">Completed</button>
+          <button class="cta" (click)="sort('status')">Completed</button>
         </div>
     </div>
 
@@ -78,7 +73,7 @@
           
           <div class="row project-list-item-group">
 
-            <div class="col-sm-4 project-list-item">
+            <div class="col-sm-5 project-list-item">
               <div class="row">
                 <div class="col-sm-6 project-list-item-column">
                   <label class="font-bold">Task</label>
@@ -93,22 +88,26 @@
 
             <div class="col-sm-5 project-list-item">
               <div class="row">
-                <div class="col-sm-4 project-list-item-column">
+                <div class="col-sm-3 project-list-item-column">
+                  <label class="font-bold">Status</label>
+                  <label>{{task.status}}</label>
+                </div>
+                <div class="col-sm-3 project-list-item-column">
                   <label class="font-bold">Priority</label>
                   <label>{{task.priority}}</label>
                 </div>
-                <div class="col-sm-4 project-list-item-column">
+                <div class="col-sm-3 project-list-item-column">
                   <label class="font-bold">Start</label>
                   <label>{{task.startDate}}</label>
                 </div>
-                <div class="col-sm-4 project-list-item-column">
+                <div class="col-sm-3 project-list-item-column">
                   <label class="font-bold">End</label>
                   <label>{{task.endDate}}</label>
                 </div>
               </div>
             </div>
 
-            <div class="col-sm-3 button-list">
+            <div class="col-sm-2 button-list">
               <div class="cta-group">
                 <button class="cta" (click)="edit(task)">Edit</button>
                 <button class="cta" (click)="end(task)">End Task</button>
