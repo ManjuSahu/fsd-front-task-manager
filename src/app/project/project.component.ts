@@ -35,7 +35,6 @@ export class ProjectComponent implements OnInit {
   @ViewChild('closeSelectManagerModal') closeSelectManagerModal: ElementRef;
 
   @ViewChild("formSubmit") formSubmit: ElementRef;
-  @Injectable()
   constructor(@Inject(DOCUMENT) private document: Document,private formBuilder: FormBuilder, private projectservice: ProjectService,
     private userService: UserService) { 
     this.projectAddForm = this.formBuilder.group({

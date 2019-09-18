@@ -52,7 +52,6 @@ export class TaskComponent implements OnInit {
 
   @ViewChild("searchProjectButton") searchProjectButton: ElementRef;
 
-  @Injectable()
   constructor(@Inject(DOCUMENT) private document: Document,
               private formBuilder: FormBuilder, 
               private taskService: TaskService,

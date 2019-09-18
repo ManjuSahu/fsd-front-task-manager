@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ParentTask } from './parent-task';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +11,20 @@ export class ParentTaskService {
   constructor(private http: HttpClient) { }
 
   updateParentTask(parentTask: ParentTask) {
-    return this.http.put("http://localhost:8080/parentTasks", parentTask);
+    return this.http.put(environment.baseUrl + "/parentTasks", parentTask);
   }
 
   addParentTask(parentTask: any) {
-    return this.http.post("http://localhost:8080/parentTasks", parentTask);
+    return this.http.post(environment.baseUrl + "/parentTasks", parentTask);
   }
 
   getParentTasks() {
-    return this.http.get<ParentTask[]>("http://localhost:8080/parentTasks");
+    return this.http.get<ParentTask[]>(environment.baseUrl + "/parentTasks");
   }
 
   deleteParentTask(parentTask) {
     const httpParams = new HttpParams().set('parentTaskId', parentTask.parentTaskId);
     const options = { params: httpParams };
-    return this.http.delete("http://localhost:8080/parentTasks", options);
+    return this.http.delete(environment.baseUrl + "/parentTasks", options);
   }
 }
