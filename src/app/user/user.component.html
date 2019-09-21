@@ -8,9 +8,9 @@
       </label>
       <div class="col-sm-9"> 
           <input type="text" formControlName="firstName">
-          <!-- <div *ngIf="submitted && messageForm.controls.name.errors" class="error">
-            <div *ngIf="messageForm.controls.name.errors.required">Your name is required!!</div>
-          </div> -->
+          <div *ngIf="submitted && userAddForm.controls.firstName.errors" class="error">
+            <div *ngIf="userAddForm.controls.firstName.errors.required">First Name is required!!</div>
+          </div>
       </div>
     </div>
     <div class="form-group row user-form">
@@ -19,9 +19,9 @@
       </label>
       <div class="col-sm-9"> 
           <input type="text" formControlName="lastName">
-              <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-                  <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-              </div> -->
+          <div *ngIf="submitted && userAddForm.controls.lastName.errors" class="error">
+            <div *ngIf="userAddForm.controls.lastName.errors.required">Last Name is required!!</div>
+          </div>
       </div>
     </div>
     
@@ -31,26 +31,22 @@
         </label>
         <div class="col-sm-9"> 
           <input type="text" formControlName="employeeId">
-              <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-                  <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-              </div> -->
+          <div *ngIf="submitted && userAddForm.controls.employeeId.errors" class="error">
+            <div *ngIf="userAddForm.controls.employeeId.errors.required">Employee ID is required!!</div>
+            <div *ngIf="userAddForm.controls.employeeId.errors.pattern">Please provide valid Employee ID!!</div>
+          </div>
         </div>
     </div>
     <div class="cta-group"> 
-          <input #formSubmit type="submit" value="Add" class="cta">
-          <input type="reset" value="Reset" class="cta">
+          <input #formSubmit type="submit" value="Add" class="cta main-cta">
+          <input type="reset" value="Reset" class="cta" (click)="_resetForm()">
     </div>
   </form>
 
 
-  <!-- <div *ngIf="submitted" class="results">
-    <strong>Name: </strong>
-    <span>{{ messageForm.controls.name.value }}</span>
-
-    
-    <strong>Message: </strong>
-    <span>{{ messageForm.controls.message.value }}</span>
-  </div> -->
+  <div *ngIf="success" class="results">
+    <strong>User Added Successfully!</strong>
+  </div>
 
   <div class="search-bar">
       <input type="text" placeholder="Search..." (keyup)="searchUsers($event)">
@@ -63,6 +59,7 @@
         <button class="cta" (click)="sort('employeeId')">Id</button>
       </div>
   </div>
+
   <div class="list-group">
     <ul *ngIf="searchedUsers">
       <li class="list-group-item" *ngFor="let user of searchedUsers">

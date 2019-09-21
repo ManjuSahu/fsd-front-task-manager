@@ -21,10 +21,4 @@ export class TaskService {
   getTasks() {
     return this.http.get<Task[]>(environment.baseUrl + "/tasks");
   }
-
-  deleteTask(task) {
-    const httpParams = new HttpParams().set('taskId', task.taskId);
-    const options = { params: httpParams };
-    return this.http.delete(environment.baseUrl + "/tasks", options);
-  }
 }

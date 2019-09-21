@@ -23,7 +23,6 @@ export class UserService {
 
   deleteUser(user) {
     const httpParams = new HttpParams().set('userId', user.userId);
-    const options = { params: httpParams };
-    return this.http.delete(environment.baseUrl + "/users", options);
+    return this.http.delete(environment.baseUrl + "/users/" + user.userId);
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ProjectService } from '../project.service';
 import { $ } from 'protractor';
 import { Project } from '../project';
@@ -10,7 +10,7 @@ import { DOCUMENT } from '@angular/common';
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
-  styleUrls: ['./project.component.css']
+  styleUrls: ['../app.component.css','./project.component.css']
 })
 export class ProjectComponent implements OnInit {
 
@@ -32,11 +32,19 @@ export class ProjectComponent implements OnInit {
 
   searchedUsers: User[];
 
+  today: Date;
+
+  lastSelectedSortColumn: String = '';
+
+  sortAsc: Boolean = true;
+
   @ViewChild('closeSelectManagerModal') closeSelectManagerModal: ElementRef;
 
   @ViewChild("formSubmit") formSubmit: ElementRef;
   constructor(@Inject(DOCUMENT) private document: Document,private formBuilder: FormBuilder, private projectservice: ProjectService,
     private userService: UserService) { 
+    this.today = new Date();
+    this.today.setHours(0,0,0,0);
     this.projectAddForm = this.formBuilder.group({
       project: ['', Validators.required],
       priority: [0, Validators.required],
@@ -46,7 +54,9 @@ export class ProjectComponent implements OnInit {
       managerId: '',
       managerName: [{value: '', disabled: true}],
       projectId: ''
-    });
+    }, {
+      validator: ProjectComponent.DateValidation
+   });
   }
 
   enableDateInputs() {
@@ -77,17 +87,18 @@ export class ProjectComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.success= false;
     if(this.projectAddForm.invalid) {
       return;
     }
     const Project = Object.assign({}, this.projectAddForm.value);
-    console.log(Project);
     const projectFromList = this.projects.filter(projectInLoop => Project.employeeId === projectInLoop.projectId).length;
     if(projectFromList > 0) {
       this.projectservice.updateProject(Project).subscribe(data => {
         this.projectservice.getProjects().subscribe(data => {
           this.projects = this.searchedProjects = data;
           this._resetForm();
+          this.success = true;
         });
       });
     }
@@ -96,10 +107,10 @@ export class ProjectComponent implements OnInit {
         this.projectservice.getProjects().subscribe(data => {
           this.projects = this.searchedProjects = data;
           this._resetForm();
+          this.success = true;
         });
       });
     }
-    this.success = true;
   }
 
   _resetForm() {
@@ -107,8 +118,11 @@ export class ProjectComponent implements OnInit {
     this.formSubmit.nativeElement.value = 'Add';
     this.projectAddForm.get('startDate').disable();
     this.projectAddForm.get('endDate').disable();
+    this.projectAddForm.get('startDate').setErrors(null);
+    this.projectAddForm.get('endDate').setErrors(null);
     this.projectAddForm.get('priority').setValue(0);
-
+    this.submitted = false;
+    this.success = false;
   }
 
   ngOnInit() {
@@ -131,7 +145,6 @@ export class ProjectComponent implements OnInit {
       managerName: project.manager.firstName+ ' '+project.manager.lastName,
       projectId: project.projectId
     });
-    console.log(this.projectAddForm.get('dateInputEnabled').value);
     if(this.projectAddForm.get('dateInputEnabled').value) {
       this.projectAddForm.get('startDate').enable();
       this.projectAddForm.get('endDate').enable();
@@ -155,34 +168,39 @@ export class ProjectComponent implements OnInit {
     this.searchedProjects = this.projects;
     let keyword = event.target.value.toLowerCase();
     if(keyword) {
-      console.log('searchProjects'+keyword);
       this.searchedProjects = this.projects.filter(
         project => (project.project.toLowerCase().includes(keyword))
       );
     } 
-    console.log(this.searchedProjects);
   }
 
   searchUsers(event: any) {
     this.searchedUsers = this.users;
     let keyword = event.target.value.replace(/ /g, '').toLowerCase();
     if(keyword) {
-      console.log('searchUsers'+keyword);
       this.searchedUsers = this.users.filter(
         user => (user.firstName.toLowerCase()+user.lastName.toLowerCase()+ user.employeeId.toString()).includes(keyword)
       );
     } 
-    console.log(this.searchedUsers);
   }
 
   sort(sortColumn) {
-      console.log(sortColumn);
-      this.searchedProjects = this.searchedProjects.sort(function(a,b) {
-        var x = a[sortColumn];
-        var y = b[sortColumn];
+    if(this.lastSelectedSortColumn === sortColumn) 
+      this.sortAsc = !this.sortAsc;
+    else
+      this.sortAsc = true;
+    this.searchedProjects = this.searchedProjects.sort(function(a,b) {
+      var x = a[sortColumn];
+      var y = b[sortColumn];
+      if(this.sortAsc) {
         return x < y ? -1 : x > y ? 1 : 0;
-    });
+      } else {
+        return x > y ? -1 : x < y ? 1 : 0;
+      }
+    }.bind(this));
+    this.lastSelectedSortColumn = sortColumn;
   }
+
 
   getNoOfTasks(project) {
     return project.tasks.length + project.parentTasks.length;
@@ -191,6 +209,38 @@ export class ProjectComponent implements OnInit {
   getNoOfCompletedTasks(project) {
     return project.tasks.filter(task => task.status === 'Completed').length +
            project.parentTasks.filter(task => task.status === 'Completed').length;
+  }
+
+  static DateValidation(abstractControl: AbstractControl) {
+    const startDateControl = abstractControl.get('startDate');
+    const endDateControl = abstractControl.get('endDate');
+    const dateInputEnabled = abstractControl.get('dateInputEnabled');
+    startDateControl.setErrors(null);
+    endDateControl.setErrors(null);
+    if(dateInputEnabled.value) {
+      const startDate = new Date(startDateControl.value);
+      startDate.setHours(0,0,0,0);
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      if(startDate < today) {
+        startDateControl.setErrors({
+          pastStartDate: true
+        });
+      }
+      const endDate = new Date(endDateControl.value);
+      endDate.setHours(0,0,0,0);
+      if(endDate < today) {
+        endDateControl.setErrors({
+          pastEndDate: true
+        });
+      }
+      if(startDate > endDate) {
+        endDateControl.setErrors({
+          startDateAfterEndDate: true
+        });
+      }
+    }
+    
   }
 
 }

@@ -7,7 +7,7 @@ import { User } from '../user';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  styleUrls: ['../app.component.css','./user.component.css']
 })
 export class UserComponent implements OnInit {
 
@@ -23,30 +23,35 @@ export class UserComponent implements OnInit {
 
   sortColumn: String = '';
 
+  lastSelectedSortColumn: String = '';
+
+  sortAsc: Boolean = true;
+
   @ViewChild("formSubmit") formSubmit: ElementRef;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService) { 
     this.userAddForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      employeeId: ['', Validators.required],
+      employeeId: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       userId: ['']
     });
   }
 
   onSubmit() {
+    this.success = false;
     this.submitted = true;
     if(this.userAddForm.invalid) {
       return;
     }
     const user = Object.assign({}, this.userAddForm.value);
-    console.log(user);
     const userFromList = this.users.filter(userInLoop => user.employeeId === userInLoop.employeeId).length;
     if(userFromList > 0) {
       this.userService.updateUser(user).subscribe(data => {
         this.userService.getUsers().subscribe(data => {
           this.users = this.searchedUsers = data;
           this._resetForm();
+          this.success = true;
         });
       });
     }
@@ -55,15 +60,18 @@ export class UserComponent implements OnInit {
         this.userService.getUsers().subscribe(data => {
         this.users = this.searchedUsers = data;
           this._resetForm();
+          this.success = true;
         });
       });
     }
-    this.success = true;
+    this.submitted = false;
   }
 
   _resetForm() {
     this.formSubmit.nativeElement.value = 'Add';
     this.userAddForm.reset();
+    this.submitted = false;
+    this.success = false;
   }
 
   ngOnInit() {
@@ -73,7 +81,6 @@ export class UserComponent implements OnInit {
   }
 
   update(user) {
-    console.log('update'+user);
     this.userAddForm.setValue({
       firstName : user.firstName,
       lastName : user.lastName,
@@ -95,21 +102,31 @@ export class UserComponent implements OnInit {
     this.searchedUsers = this.users;
     let keyword = event.target.value.replace(/ /g, '').toLowerCase();
     if(keyword) {
-      console.log('searchUsers'+keyword);
       this.searchedUsers = this.users.filter(
         user => (user.firstName.toLowerCase()+user.lastName.toLowerCase()+ user.employeeId.toString()).includes(keyword)
       );
     } 
-    console.log(this.searchedUsers);
   }
 
   sort(sortColumn) {
-      console.log(sortColumn);
-      this.searchedUsers = this.searchedUsers.sort(function(a,b) {
-        var x = a[sortColumn];
-        var y = b[sortColumn];
+    if(this.lastSelectedSortColumn === sortColumn) 
+      this.sortAsc = !this.sortAsc;
+    else
+      this.sortAsc = true;
+    this.searchedUsers = this.searchedUsers.sort(function(a,b) {
+      var x = a[sortColumn];
+      var y = b[sortColumn];
+      if(sortColumn === 'firstName' || sortColumn === 'lastName') {
+        x = x.toLowerCase();
+        y = y.toLowerCase();
+      }
+      if(this.sortAsc) {
         return x < y ? -1 : x > y ? 1 : 0;
-    });
+      } else {
+        return x > y ? -1 : x < y ? 1 : 0;
+      }
+    }.bind(this));
+    this.lastSelectedSortColumn = sortColumn;
   }
 
 }

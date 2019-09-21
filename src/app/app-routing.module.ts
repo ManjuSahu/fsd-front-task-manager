@@ -7,7 +7,7 @@ import { ViewTaskComponent } from './view-task/view-task.component';
 
 const routes: Routes = [
   {path: 'users', component: UserComponent},
-  {path: 'projects', component: ProjectComponent},
+  {path: '', component: ProjectComponent},
   {path: 'addTask', component: TaskComponent},
   {path: 'viewTask', component: ViewTaskComponent}
 ];

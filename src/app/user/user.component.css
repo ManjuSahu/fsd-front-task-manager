@@ -44,4 +44,16 @@ span.italic {
     font-style: italic;
     font-weight: bold;
     padding-top: 5px;
+    color: #007bff;
+}
+
+h2.warning {
+    font-size: 1.5 em;
+    margin: 40px 40px;
+    color: #007bff;
+    text-align: center;
+}
+
+div.results {
+    margin: 20px 40px;
 }

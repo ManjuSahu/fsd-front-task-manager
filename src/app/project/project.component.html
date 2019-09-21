@@ -1,6 +1,5 @@
 <section>
     <form class="form-horizontal" [formGroup]="projectAddForm" (ngSubmit)="onSubmit()">
-      <!-- <h5 *ngIf="success">Your form is valid!</h5>  -->
   
       <div class="form-group row project-form">
           <label class="control-label col-sm-2">
@@ -8,30 +7,36 @@
         </label>
         <div class="col-sm-10"> 
             <input type="text" formControlName="project">
-            <!-- <div *ngIf="submitted && messageForm.controls.name.errors" class="error">
-              <div *ngIf="messageForm.controls.name.errors.required">Your name is required!!</div>
-            </div> -->
+            <div *ngIf="submitted && projectAddForm.controls.project.errors" class="error">
+              <div *ngIf="projectAddForm.controls.project.errors.required">Project title is required!!</div>
+            </div>
         </div>
       </div>
       <div class="form-group row project-form">
         <div class="offset-sm-2 col-sm-4"> 
-                <input type="checkbox" formControlName="dateInputEnabled" (click)="enableDateInputs()">&nbsp;
-                <label>Set Start and End Date</label>
-          <!-- <input type="checkbox" [(ngModel)]="dateInputEnabled" [ngModelOptions]="{standalone: true}">Set Start and End Date -->
-          <!-- <span><input type="checkbox" formControlName="dateInputEnabled" (click)="enableDateInputs()"></span>
-        </div><div class="col-sm-2"> 
-            <span>Set Start and End Date</span> -->
+          <input type="checkbox" formControlName="dateInputEnabled" (click)="enableDateInputs()">&nbsp;
+          <label>Set Start and End Date</label>
+        </div>
+        <div class="col-sm-3"> 
+          <input type="date" placeholder="Start Date :" formControlName="startDate" min="{{ today | date:'yyyy-MM-dd' }}">
+        </div>
+       
+        
+        <div class="col-sm-3"> 
+          <input type="date"  placeholder="End Date :" formControlName="endDate" min="{{ today | date:'yyyy-MM-dd' }}">
+        </div>
+      </div>
+      <div class="form-group row project-form">
+        <div class="offset-sm-2 col-sm-4"> 
+          <div *ngIf="submitted && projectAddForm.controls.startDate.errors" class="error">
+            <div *ngIf="projectAddForm.controls.startDate.errors.pastStartDate">Start Date cannot be in past!!</div>
           </div>
-        <div class="col-sm-3"> 
-          <input type="date" placeholder="Start Date :" formControlName="startDate">
-        </div>
-        <div class="col-sm-3"> 
-          <input type="date"  placeholder="End Date :" formControlName="endDate">
-        </div>
-        <div>
-            <!-- <div *ngIf="submitted && messageForm.controls.name.errors" class="error">
-              <div *ngIf="messageForm.controls.name.errors.required">Your name is required!!</div>
-            </div> -->
+          <div *ngIf="submitted && projectAddForm.controls.endDate.errors" class="error">
+            <div *ngIf="projectAddForm.controls.endDate.errors.pastEndDate">End Date cannot be in past!!</div>
+          </div>
+          <div *ngIf="submitted && projectAddForm.controls.endDate.errors" class="error">
+            <div *ngIf="projectAddForm.controls.endDate.errors.startDateAfterEndDate">End Date cannot be before Start Date!!</div>
+          </div>
         </div>
       </div>
       <div class="form-group row project-form">
@@ -41,9 +46,6 @@
         <div class="col-sm-10"> 
           <input type="range" class="custom-range" formControlName="priority" value="0" min="0" max="30">
           <label>{{ projectAddForm.get('priority').value  }}</label>
-        <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-            <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-        </div> -->
         </div>
       </div>
   
@@ -56,29 +58,18 @@
         </div>
         <div class="col-sm-3 cta-group">
             <button type="button" class="cta" data-toggle="modal" data-target="#exampleModalLong">Search</button>
-        <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-            <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-        </div> -->
         </div>
       </div>
-      
-      <!-- <div class="form-group row project-form">
-          <label class="control-label col-sm-2">
-            Employee ID:
-          </label>
-          <div class="col-sm-10"> 
-            <input type="text" formControlName="employeeId">-->
-                <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-                    <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-                </div> 
-          </div>
-      </div> -->
   
       <div class="cta-group"> 
             <input id="formSubmit" #formSubmit type="submit" value="Add" class="cta">
-            <input type="reset" value="Reset" class="cta">
+            <input type="reset" value="Reset" (click)="_resetForm()" class="cta">
       </div>
     </form>
+
+    <div *ngIf="success" class="results">
+      <strong>Project Added Successfully!</strong>
+    </div>
   
     <!-- Modal -->
     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -116,15 +107,6 @@
       </div>
     </div>
   
-    <!-- <div *ngIf="submitted" class="results">
-      <strong>Name: </strong>
-      <span>{{ messageForm.controls.name.value }}</span>
-  
-      
-      <strong>Message: </strong>
-      <span>{{ messageForm.controls.message.value }}</span>
-    </div> -->
-  
     <div class="search-sort-bar">
         <div>
           <input type="text" placeholder="Search..." (keyup)="searchProjects($event)">
@@ -147,7 +129,7 @@
 
                   <div class="row">
                     <div class="col-sm-6"><label class="font-bold">Project: </label></div>
-                    <div class="col-sm-6"><label>{{project.project}}</label></div>
+                    <div class="col-sm-6"><label class="font-bold">{{project.project}}</label></div>
                   </div>
 
                   <div class="row">

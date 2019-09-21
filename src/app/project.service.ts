@@ -21,10 +21,4 @@ export class ProjectService {
   getProjects() {
     return this.http.get<Project[]>(environment.baseUrl + "/projects");
   }
-
-  deleteProject(project) {
-    const httpParams = new HttpParams().set('projectId', project.projectId);
-    const options = { params: httpParams };
-    return this.http.delete(environment.baseUrl + "/projects", options);
-  }
 }

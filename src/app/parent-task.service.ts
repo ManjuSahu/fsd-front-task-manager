@@ -21,10 +21,4 @@ export class ParentTaskService {
   getParentTasks() {
     return this.http.get<ParentTask[]>(environment.baseUrl + "/parentTasks");
   }
-
-  deleteParentTask(parentTask) {
-    const httpParams = new HttpParams().set('parentTaskId', parentTask.parentTaskId);
-    const options = { params: httpParams };
-    return this.http.delete(environment.baseUrl + "/parentTasks", options);
-  }
 }

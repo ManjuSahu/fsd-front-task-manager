@@ -89,3 +89,10 @@ input[type="date"]:valid:before {
     flex-wrap: wrap;
 }
 
+div.error {
+    width: 100%;
+}
+
+div.results {
+    margin: 20px 40px;
+}
