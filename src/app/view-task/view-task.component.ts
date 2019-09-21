@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-view-task',
   templateUrl: './view-task.component.html',
-  styleUrls: ['./view-task.component.css']
+  styleUrls: ['../app.component.css','./view-task.component.css']
 })
 export class ViewTaskComponent implements OnInit {
 
@@ -26,6 +26,10 @@ export class ViewTaskComponent implements OnInit {
   selectedProject: any = {};
 
   tasks: Task[];
+
+  lastSelectedSortColumn: String = '';
+
+  sortAsc: Boolean = true;
   
   @ViewChild('closeSelectProjectModal') closeSelectProjectModal: ElementRef;
 
@@ -52,12 +56,10 @@ export class ViewTaskComponent implements OnInit {
     this.searchedProjects = this.projects;
     let keyword = event.target.value.toLowerCase();
     if(keyword) {
-      console.log('searchProjects'+keyword);
       this.searchedProjects = this.projects.filter(
         project => (project.project.toLowerCase().includes(keyword))
       );
     } 
-    console.log(this.searchedProjects);
   }
 
   selectProject(project: Project) {
@@ -92,38 +94,56 @@ export class ViewTaskComponent implements OnInit {
   }
 
   edit(task) {
-    this.router.navigate(['/addTask'], { state: { selectedTask: task } })
-      .then(success => console.log('navigation success?' , success))
-      .catch(console.error); 
+    this.router.navigate(['/addTask'], { state: { selectedTask: task } });
   }
 
   end(task) {
-    task.status =  'Completed';
     if(task.isParentTask) {
       const parentTask: ParentTask = {
         parentId: task.taskId,
         parentTask: task.task,
         projectId: task.project.projectId,
         project: task.project,
-        status: task.status
+        status: 'Completed'
       }
       this.parentTaskService.updateParentTask(parentTask).subscribe((data) =>
-        console.log("Task ended!")
+        task.status =  'Completed'
       );
     }
-    else 
-      this.taskService.updateTask(task).subscribe((data) =>
-        console.log("Task ended!")
-    );
+    else {
+        const task1: any = {
+          taskId: task.taskId,
+          task: task.task,
+          isParentTask: task.isParentTask,
+          priority: task.priority,
+          startDate: task.startDate,
+          endDate: task.endDate,
+          parentTask: task.parentTaskId ? task.parentTask: null,
+          project: task.project,
+          taskOwner: task.taskOwner,
+          status: 'Completed'
+        }
+        this.taskService.updateTask(task1).subscribe((data) =>
+          task.status =  'Completed'
+      );
+    }
   }
 
   sort(sortColumn) {
-    console.log(sortColumn);
+    if(this.lastSelectedSortColumn === sortColumn) 
+      this.sortAsc = !this.sortAsc;
+    else
+      this.sortAsc = true;
     this.allTasks = this.allTasks.sort(function(a,b) {
       var x = a[sortColumn];
       var y = b[sortColumn];
-      return x < y ? -1 : x > y ? 1 : 0;
-  });
-}
+      if(this.sortAsc) {
+        return x < y ? -1 : x > y ? 1 : 0;
+      } else {
+        return x > y ? -1 : x < y ? 1 : 0;
+      }
+    }.bind(this));
+    this.lastSelectedSortColumn = sortColumn;
+  }
 
 }

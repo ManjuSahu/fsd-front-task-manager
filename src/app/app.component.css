@@ -1,7 +1,9 @@
 
 
-div.results {
+div.results,
+h3.info {
     color: #007bff;
+    margin: 20px 40px;
 }
 
 div.results {

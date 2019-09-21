@@ -50,14 +50,6 @@ input[type="date"] {
     width: 100%;
 }
 
-input[type="date"]:before {
-    content: attr(placeholder);
-}
-input[type="date"]:focus:before,
-input[type="date"]:valid:before {
-    content: "";
-}
-
 .project-list-item {
     display: flex;
     justify-content: space-between;

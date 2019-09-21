@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { TaskService } from '../task.service';
 import { ProjectService } from '../project.service';
 import { Project } from '../project';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
-  styleUrls: ['./task.component.css']
+  styleUrls: ['../app.component.css','./task.component.css']
 })
 export class TaskComponent implements OnInit {
 
@@ -63,12 +63,13 @@ export class TaskComponent implements OnInit {
       if(this.router.getCurrentNavigation().extras.state) {
         this.selectedTask = this.router.getCurrentNavigation().extras.state.selectedTask;
       }
-      console.log(this.selectedTask);
       this.initializeForm();
   }
 
   initializeForm() {
-    this.taskAddForm = this.formBuilder.group(this.getFormModel());
+    this.taskAddForm = this.formBuilder.group(this.getFormModel(), {
+      validator: TaskComponent.DateValidation
+    });
     this.setRangeInputValueAgain();
     this.disbleParentTaskFields();
   }
@@ -84,8 +85,9 @@ export class TaskComponent implements OnInit {
 
   getFormModel() {
     return {
-      projectId: this.selectedTask ? this.selectedTask.project.projectId : '',
-      projectName: [{value: this.selectedTask ? this.selectedTask.project.project : '', disabled: true}, Validators.required],
+      projectId: [this.selectedTask ? this.selectedTask.project.projectId : '', Validators.required],
+      projectName: [{value: this.selectedTask ? this.selectedTask.project.project : '', disabled: true}],
+      taskId: this.selectedTask ? this.selectedTask.taskId: '',
       task: [this.selectedTask ? this.selectedTask.task : '', Validators.required],
       isParentTask: [{value: this.selectedTask ? this.selectedTask.isParentTask : false, disabled: this.selectedTask}],
       priority: [this.selectedTask ? this.selectedTask.priority : 0, Validators.required],
@@ -164,6 +166,7 @@ export class TaskComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.success= false;
     if(this.taskAddForm.invalid) {
       return;
     }
@@ -175,18 +178,27 @@ export class TaskComponent implements OnInit {
       });
       this.parentTaskService.addParentTask(task).subscribe(data => {
           this._resetForm();
+          this.success = true;
       });
     } else {
       const task: Task = Object.assign({taskId: this.selectedTask ? this.selectedTask.taskId: ''}, this.taskAddForm.value);
       this.taskService.addTask(task).subscribe(data => {
           this._resetForm();
+          this.success = true;
       });
     }
-    this.success = true;
   }
 
   _resetForm() {
     this.taskAddForm.reset();
+    this.submitted = false;
+    this.success = false;
+    this.taskAddForm.get('startDate').setErrors(null);
+    this.taskAddForm.get('endDate').setErrors(null);
+    this.formSubmit.nativeElement.value = 'Add';
+    this.searchProjectButton.nativeElement.disabled = false;
+    this.selectedTask = null;
+    this.taskAddForm.get('isParentTask').enable();
     this._initializeParentTaskFields();
   }
 
@@ -207,41 +219,66 @@ export class TaskComponent implements OnInit {
     this.searchedProjects = this.projects;
     let keyword = event.target.value.toLowerCase();
     if(keyword) {
-      console.log('searchProjects'+keyword);
       this.searchedProjects = this.projects.filter(
         project => (project.project.toLowerCase().includes(keyword))
       );
     } 
-    console.log(this.searchedProjects);
   }
 
   searchParentTasks(event: any) {
     this.searchedParentTasks = this.parentTasks;
     let keyword = event.target.value.toLowerCase();
     if(keyword) {
-      console.log('searchedParentTasks'+keyword);
       this.searchedParentTasks = this.parentTasks.filter(
         parentTask => (parentTask.parentTask.toLowerCase().includes(keyword))
       );
     } 
-    console.log(this.searchedParentTasks);
   }
 
   searchUsers(event: any) {
     this.searchedUsers = this.users;
     let keyword = event.target.value.replace(/ /g, '').toLowerCase();
     if(keyword) {
-      console.log('searchUsers'+keyword);
       this.searchedUsers = this.users.filter(
         user => (user.firstName.toLowerCase()+user.lastName.toLowerCase()+ user.employeeId.toString()).includes(keyword)
       );
     } 
-    console.log(this.searchedUsers);
   }
 
   clearParentTask() {
     this.taskAddForm.get('parentTaskId').setValue('');
     this.taskAddForm.get('parentTaskName').setValue('');
+  }
+
+  static DateValidation(abstractControl: AbstractControl) {
+
+    const startDateControl = abstractControl.get('startDate');
+    const endDateControl = abstractControl.get('endDate');
+    const taskIdControl = abstractControl.get('taskId');
+    const taskId = taskIdControl.value;
+    startDateControl.setErrors(null);
+    endDateControl.setErrors(null);
+      const startDate = new Date(startDateControl.value);
+      startDate.setHours(0,0,0,0);
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      if(!taskId && startDate < today) {
+        startDateControl.setErrors({
+          pastStartDate: true
+        });
+      }
+      const endDate = new Date(endDateControl.value);
+      endDate.setHours(0,0,0,0);
+      if(endDate < today) {
+        endDateControl.setErrors({
+          pastEndDate: true
+        });
+      }
+      if(startDate > endDate) {
+        endDateControl.setErrors({
+          startDateAfterEndDate: true
+        });
+      }
   }
 
 }

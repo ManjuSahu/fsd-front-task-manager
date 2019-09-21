@@ -92,7 +92,3 @@ input[type="date"]:valid:before {
 div.error {
     width: 100%;
 }
-
-div.results {
-    margin: 20px 40px;
-}

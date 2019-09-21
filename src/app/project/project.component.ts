@@ -215,6 +215,8 @@ export class ProjectComponent implements OnInit {
     const startDateControl = abstractControl.get('startDate');
     const endDateControl = abstractControl.get('endDate');
     const dateInputEnabled = abstractControl.get('dateInputEnabled');
+    const projectIdControl = abstractControl.get('projectId');
+    const projectId = projectIdControl.value;
     startDateControl.setErrors(null);
     endDateControl.setErrors(null);
     if(dateInputEnabled.value) {
@@ -222,7 +224,7 @@ export class ProjectComponent implements OnInit {
       startDate.setHours(0,0,0,0);
       const today = new Date();
       today.setHours(0,0,0,0);
-      if(startDate < today) {
+      if(!projectId && startDate < today) {
         startDateControl.setErrors({
           pastStartDate: true
         });

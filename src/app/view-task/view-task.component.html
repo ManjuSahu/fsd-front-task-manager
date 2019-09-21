@@ -1,14 +1,6 @@
 <section>
 
     <div class="row search-sort-bar">
-        <!-- <div class="col-sm-5 sort-bar">
-            <label class="control-label">
-                Project: 
-            </label>
-            <input type="text" disabled value="{{ selectedProject.project }}">
-            <button type="button" #searchProjectButton class="search-button" data-toggle="modal" data-target="#projectModal">Search</button>
-        </div> -->
-
         <div class="col-sm-1"> 
           <label class="control-label">
               Project: 
@@ -66,6 +58,10 @@
           </div>
         </div>
       </div>
+
+    <h3 *ngIf="!selectedProject.projectId" class="info">
+      Please select a project to view tasks!!
+    </h3>
 
     <div class="list-group">
       <ul *ngIf="allTasks">

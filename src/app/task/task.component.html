@@ -1,6 +1,5 @@
 <section>
     <form class="form-horizontal" [formGroup]="taskAddForm" (ngSubmit)="onSubmit()">
-      <!-- <h5 *ngIf="success">Your form is valid!</h5>  -->
   
       <div class="form-group row task-form">
           <label class="control-label col-sm-2">
@@ -8,12 +7,12 @@
         </label>
         <div class="col-sm-6"> 
             <input type="text" formControlName="projectName">
+            <div *ngIf="submitted && taskAddForm.controls.projectId.errors" class="error">
+                <div *ngIf="taskAddForm.controls.projectId.errors.required">Please select a project!!</div>
+              </div>
         </div>
         <div class="col-sm-4">
             <button type="button" #searchProjectButton class="search-button" data-toggle="modal" data-target="#projectModal">Search</button>
-        <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-            <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-        </div> -->
         </div>
       </div>
 
@@ -23,9 +22,9 @@
         </label>
         <div class="col-sm-10"> 
             <input type="text" formControlName="task">
-            <!-- <div *ngIf="submitted && messageForm.controls.name.errors" class="error">
-              <div *ngIf="messageForm.controls.name.errors.required">Your name is required!!</div>
-            </div> -->
+            <div *ngIf="submitted && taskAddForm.controls.task.errors" class="error">
+              <div *ngIf="taskAddForm.controls.task.errors.required">Task description is required!!</div>
+            </div>
         </div>
       </div>
 
@@ -33,10 +32,6 @@
         <div class="offset-sm-2 col-sm-10"> 
             <input type="checkbox" formControlName="isParentTask" (click)="disbleParentTaskFields()">&nbsp;
             <label>Parent Task</label>
-          <!-- <input type="checkbox" [(ngModel)]="dateInputEnabled" [ngModelOptions]="{standalone: true}">Set Start and End Date -->
-          <!-- <span><input type="checkbox" formControlName="dateInputEnabled" (click)="enableDateInputs()"></span>
-        </div><div class="col-sm-2"> 
-            <span>Set Start and End Date</span> -->
         </div>
       </div>
 
@@ -47,9 +42,6 @@
         <div class="col-sm-10"> 
           <input type="range" class="custom-range" formControlName="priority" min="0" max="30">
           <label>{{ taskAddForm.get('priority').value  }}</label>
-        <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-            <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-        </div> -->
         </div>
       </div>
 
@@ -63,9 +55,6 @@
         <div class="col-sm-4 button-group">
             <button type="button" #clearParentTaskButton (click)="clearParentTask()" class="search-button" data-toggle="modal">Clear</button>
             <button type="button" #searchParentTaskButton class="search-button" data-toggle="modal" data-target="#parentTaskModal">Search</button>
-        <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-            <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-        </div> -->
         </div>
       </div>
       
@@ -74,15 +63,27 @@
             Start Date: 
         </label>
         <div class="col-sm-3"> 
-          <input type="date" placeholder="Start Date :" formControlName="startDate">
+          <input type="date" placeholder="Start Date :" formControlName="startDate" min="{{ today() | date:'yyyy-MM-dd' }}">
         </div>
         <label class="control-label offset-sm-2 col-sm-2">
             End Date: 
         </label>
         <div class="col-sm-3"> 
-          <input type="date"  placeholder="End Date :" formControlName="endDate">
+          <input type="date"  placeholder="End Date :" formControlName="endDate" min="{{ today() | date:'yyyy-MM-dd' }}">
         </div>
       </div>
+
+      <div class="form-group row project-form">
+          <div class="offset-sm-2 col-sm-10"> 
+            <div *ngIf="submitted && taskAddForm.controls.startDate.errors" class="error">
+              <div *ngIf="taskAddForm.controls.startDate.errors.pastStartDate">Start Date cannot be in past!!</div>
+            </div>
+            <div *ngIf="submitted && taskAddForm.controls.endDate.errors" class="error">
+              <div *ngIf="taskAddForm.controls.endDate.errors.pastStartDate">End Date cannot be in past!!</div>
+              <div *ngIf="taskAddForm.controls.endDate.errors.startDateAfterEndDate">End Date cannot be before Start Date!!</div>
+            </div>
+          </div>
+        </div>
 
       <div class="form-group row task-form">
           <label class="control-label col-sm-2">
@@ -93,33 +94,18 @@
         </div>
         <div class="col-sm-4">
             <button type="button" #searchTaskOwnerButton class="search-button" data-toggle="modal" data-target="#taskOwnerModal">Search</button>
-        <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-            <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-        </div> -->
         </div>
       </div>
 
-            <!-- <div *ngIf="submitted && messageForm.controls.name.errors" class="error">
-              <div *ngIf="messageForm.controls.name.errors.required">Your name is required!!</div>
-            </div> -->
-  
-      <!-- <div class="form-group row task-form">
-          <label class="control-label col-sm-2">
-            Employee ID:
-          </label>
-          <div class="col-sm-10"> 
-            <input type="text" formControlName="employeeId">-->
-                <!-- <div *ngIf="submitted && messageForm.controls.message.errors" class="error">
-                    <div *ngIf="messageForm.controls.message.errors.required">A message is required!!</div>
-                </div> 
-          </div>
-      </div> -->
-  
       <div class="offset-sm-6 col-sm-6 button-group cta-group"> 
             <input id="formSubmit" #formSubmit type="submit" value="{{ selectedTask ? 'Update': 'Add'}}" class="cta">
             <input type="reset" value="Reset" class="cta">
           </div>
     </form>
+
+    <div *ngIf="success" class="results">
+        <strong>Task Added/Updated Successfully!</strong>
+    </div>
   
     <!-- Modal -->
     <div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -222,14 +208,4 @@
         </div>
       </div>
     </div>
-  
-    <!-- <div *ngIf="submitted" class="results">
-      <strong>Name: </strong>
-      <span>{{ messageForm.controls.name.value }}</span>
-  
-      
-      <strong>Message: </strong>
-      <span>{{ messageForm.controls.message.value }}</span>
-    </div> -->
-  
   </section>
