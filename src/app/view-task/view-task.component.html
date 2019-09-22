@@ -1,28 +1,32 @@
 <section>
 
     <div class="row search-sort-bar">
-        <div class="col-sm-1"> 
+        <div class="col-lg-1 w-100"> 
           <label class="control-label">
               Project: 
           </label>
         </div>
-        <div class="col-sm-3"> 
+        <div class="col-lg-3 w-100"> 
           <input type="text" disabled value="{{ selectedProject.project }}">
         </div>
-        <div class="col-sm-2">
+        <div class="col-lg-2 w-100">
           <button type="button" #searchProjectButton class="search-button" data-toggle="modal" data-target="#projectModal">Search</button>
         </div>
 
-        <div class="col-sm-6 sort-bar">
-          <div class="sort-icon-holder"> 
-              <span class="italic">
-                Sort Task By:
+        <div class="col-lg-6  w-100 sort-bar"> 
+          <div class="col-lg-1 w-100 sort-icon-holder"> 
+              <span class=" w-100 italic">
+                Sort:
               </span>
           </div>
-          <button class="cta" (click)="sort('startDate')">Start Date</button>
-          <button class="cta" (click)="sort('endDate')">End Date</button>
-          <button class="cta" (click)="sort('priority')">Priority</button>
-          <button class="cta" (click)="sort('status')">Completed</button>
+          <div class="col-lg-5  w-100 sort-icon-holder"> 
+            <button class="cta" (click)="sort('startDate')">Start Date</button>
+            <button class="cta" (click)="sort('endDate')">End Date</button>
+          </div>
+          <div class="col-lg-5  w-100 sort-icon-holder"> 
+            <button class="cta" (click)="sort('priority')">Priority</button>
+            <button class="cta" (click)="sort('status')">Completed</button>
+          </div>
         </div>
     </div>
 
@@ -59,9 +63,9 @@
         </div>
       </div>
 
-    <h3 *ngIf="!selectedProject.projectId" class="info">
+    <h4 *ngIf="!selectedProject.projectId" class="info">
       Please select a project to view tasks!!
-    </h3>
+    </h4>
 
     <div class="list-group">
       <ul *ngIf="allTasks">
@@ -69,13 +73,13 @@
           
           <div class="row project-list-item-group">
 
-            <div class="col-sm-5 project-list-item">
+            <div class="col-md-5 project-list-item">
               <div class="row">
-                <div class="col-sm-6 project-list-item-column">
+                <div class="col-md-6 project-list-item-column">
                   <label class="font-bold">Task</label>
                   <label>{{task.task}}</label>
                 </div>
-                <div class="col-sm-6 project-list-item-column">
+                <div class="col-md-6 project-list-item-column">
                   <label class="font-bold">Parent</label>
                   <label>{{task.parentTask.parentTask}}</label>
                 </div>

@@ -1,9 +1,9 @@
 
 
 div.results,
-h3.info {
+h4.info {
     color: #007bff;
-    margin: 20px 40px;
+    margin: 20px 20px;
 }
 
 div.results {
@@ -35,4 +35,8 @@ div.error {
         height:0;
         visibility:hidden;
     }
+}
+
+ul {
+    padding-left: 20px;
 }

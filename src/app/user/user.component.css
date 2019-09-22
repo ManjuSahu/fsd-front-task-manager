@@ -12,6 +12,12 @@ section {
 .cta-group {
     text-align: right;
 }
+
+
+.cta-group button{
+    width: 100%;
+}
+
 input.cta,
 button.cta {
     width: 100px;
@@ -29,15 +35,16 @@ div.font-bold {
 }
 
 form {
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
-div.search-bar {
-    margin: 20px 0;
-    margin-left: 40px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+
+div.search-bar > div,
+div.search-bar button,
+div.search-bar span,
+div.search-bar input  {
+  width: 100%;
+  margin: 10px 15px 5px 0;
 }
 
 span.italic {
@@ -45,11 +52,12 @@ span.italic {
     font-weight: bold;
     padding-top: 5px;
     color: #007bff;
+    display: inline-flex;
 }
 
 h2.warning {
     font-size: 1.5 em;
-    margin: 40px 40px;
+    margin: 20px 40px;
     color: #007bff;
     text-align: center;
 }

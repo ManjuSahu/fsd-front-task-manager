@@ -99,7 +99,7 @@
 
       <div class="offset-sm-6 col-sm-6 button-group cta-group"> 
             <input id="formSubmit" #formSubmit type="submit" value="{{ selectedTask ? 'Update': 'Add'}}" class="cta">
-            <input type="reset" value="Reset" class="cta">
+            <input type="reset" value="Reset" class="cta" (click)="_resetForm()">
           </div>
     </form>
 

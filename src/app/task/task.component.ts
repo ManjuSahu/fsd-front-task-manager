@@ -177,8 +177,11 @@ export class TaskComponent implements OnInit {
         projectId: this.taskAddForm.get('projectId').value,
       });
       this.parentTaskService.addParentTask(task).subscribe(data => {
-          this._resetForm();
-          this.success = true;
+        this._resetForm();
+        this.success = true;
+        this.parentTaskService.getParentTasks().subscribe(data => {
+          this.parentTasks = this.searchedParentTasks = data;
+        })
       });
     } else {
       const task: Task = Object.assign({taskId: this.selectedTask ? this.selectedTask.taskId: ''}, this.taskAddForm.value);
@@ -200,6 +203,9 @@ export class TaskComponent implements OnInit {
     this.selectedTask = null;
     this.taskAddForm.get('isParentTask').enable();
     this._initializeParentTaskFields();
+    this.taskAddForm.get('priority').setValue(0);
+    this.taskAddForm.get('startDate').setValue(this.today());
+    this.taskAddForm.get('endDate').setValue(this.tomorrow());
   }
 
   ngOnInit() {

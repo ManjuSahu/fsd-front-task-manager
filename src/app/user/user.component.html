@@ -1,6 +1,5 @@
 <section>
   <form class="form-horizontal" [formGroup]="userAddForm" (ngSubmit)="onSubmit()">
-    <h5 *ngIf="success">Your form is valid!</h5> 
 
     <div class="form-group row user-form">
         <label class="control-label col-sm-3">
@@ -49,15 +48,29 @@
   </div>
 
   <div class="search-bar">
-      <input type="text" placeholder="Search..." (keyup)="searchUsers($event)">
-      <div>
+    <div class="row">
+      <div class="col-sm-4"> 
+        <input type="text" placeholder="Search..." (keyup)="searchUsers($event)">
+      </div>
+      <div class="offset-sm-1 col-sm-1"> 
         <span class="italic">
           Sort:
         </span>
-        <button class="cta" (click)="sort('firstName')">First Name</button>
-        <button class="cta" (click)="sort('lastName')">Last Name</button>
-        <button class="cta" (click)="sort('employeeId')">Id</button>
       </div>
+      <div class="col-sm-6"> 
+        <div class="row">
+          <div class="col-md-4"> 
+          <button class="cta" (click)="sort('firstName')">First Name</button>
+          </div>
+          <div class="col-sm-4 "> 
+            <button class="cta" (click)="sort('lastName')">Last Name</button>
+          </div>
+          <div class="col-sm-4 "> 
+            <button class="cta" (click)="sort('employeeId')">Id</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="list-group">

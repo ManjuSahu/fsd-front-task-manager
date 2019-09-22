@@ -13,8 +13,13 @@ div.search-sort-bar input {
     width: 100%;
 }
 
+div.search-sort-bar {
+    margin-left: 0;
+}
+
 button.search-button {
-    width: 100px;
+    width: 100%;
+    margin: 2px 2px 0 0;
 }
 
 div.sort-bar {
@@ -34,19 +39,18 @@ div.sort-bar > div {
 div.sort-bar * {
     margin: 2px 2px 0 2px;
     padding-left: 0;
-    width: 100px;
+    width: 100%;
 }
 
-div.search-sort-bar > div.sort-icon-holder {
-    text-align: right;
+div.sort-icon-holder {
     padding-right: 0;
     padding-left: 0;
     vertical-align: middle;
+    width: 100%;
 }
 
 span.italic {
     font-style: italic;
-    font-size: small;
 }
 
 .project-list-item-column {
@@ -56,6 +60,12 @@ span.italic {
 
 .button-list {
     padding-right: 0;
+    width: 100%;
+}
+
+.button-list button {
+    padding-right: 0;
+    width: 100%;
 }
 
 .cta-group {
@@ -65,12 +75,11 @@ span.italic {
 }
 
 .cta-group button {
-    width: 100px;
     margin: 2px 2px;
 }
 
 div.project-search-bar {
-    margin-left: 40px;
+    margin-left: 20px;
     margin-bottom: 20px;
 }
 
@@ -93,7 +102,13 @@ div.row {
 }
 
 form {
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
+div.w-100 {
+    width: 100%;
+}
 
+div.pl-5 {
+    padding-left: 20px !important;
+}
