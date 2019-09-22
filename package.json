@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --base-href=/task-manager/",
+    "build-prod": "ng build --prod --base-href=/task-manager/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
