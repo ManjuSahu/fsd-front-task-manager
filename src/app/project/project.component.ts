@@ -140,9 +140,9 @@ export class ProjectComponent implements OnInit {
       priority : project.priority,
       startDate : project.startDate,
       endDate: project.endDate,
-      managerId: project.manager.userId,
+      managerId: project.manager ? project.manager.userId : '',
       dateInputEnabled: !!project.startDate || !!project.endDate,
-      managerName: project.manager.firstName+ ' '+project.manager.lastName,
+      managerName: project.manager ? project.manager.firstName+ ' '+project.manager.lastName : '',
       projectId: project.projectId
     });
     if(this.projectAddForm.get('dateInputEnabled').value) {
